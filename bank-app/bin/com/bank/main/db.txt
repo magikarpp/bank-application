@@ -1,1 +1,2 @@
 shimjay1@gmail.com magikarp 123 55.0 false
+youness@gmail.com you 123 100.0 false
