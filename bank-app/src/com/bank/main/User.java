@@ -2,30 +2,37 @@ package com.bank.main;
 
 public class User {
 
-	private String username;
 	private String email;
-	private String password;
+	private String username;
+	private String pass;
 	private double balance;
-	private boolean active;
+	
 	private Handler handler;
 	
-	public User(String email, String username, String password, double balance, boolean active, Handler handler) {
+	public User(Handler handler) {
 		super();
-		this.email = email;
-		this.username = username;
-		this.password = password;
-		this.balance = balance;
-		this.active = active;
+		email = "";
+		username = "";
+		pass = "";
+		balance = 0;
 		this.handler = handler;
 	}
 	
-	public User(String email, String username, String password) {
+	public User(String email, String username, String pass, double balance, Handler handler) {
 		super();
 		this.email = email;
 		this.username = username;
-		this.password = password;
+		this.pass = pass;
+		this.balance = balance;
+		this.handler = handler;
+	}
+	
+	public User(String email, String username, String pass) {
+		super();
+		this.email = email;
+		this.username = username;
+		this.pass = pass;
 		this.balance = 0;
-		this.active = false;
 	}
 	
 	public double depositBalance(double amount) {
@@ -38,15 +45,6 @@ public class User {
 		balance -= amount;
 		handler.updateUser(this);
 		return balance;
-	}
-	
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-		handler.updateUser(this);
 	}
 
 	public String getUsername() {
@@ -63,11 +61,11 @@ public class User {
 		this.email = email;
 		handler.updateUser(this);
 	}
-	public String getPassword() {
-		return password;
+	public String getpass() {
+		return pass;
 	}
-	public void setPassword(String password) {
-		this.password = password;
+	public void setpass(String pass) {
+		this.pass = pass;
 		handler.updateUser(this);
 	}
 	public double getBalance() {
@@ -77,5 +75,5 @@ public class User {
 		this.balance = balance;
 		handler.updateUser(this);
 	}
-		
+
 }

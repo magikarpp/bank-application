@@ -15,7 +15,7 @@ public class Bank {
 		app.start();
 	}
 	
-	public static Bank getInstance() {
+	private static Bank getInstance() {
 		if(bank == null) {
 			bank = new Bank();
 		}
@@ -23,6 +23,7 @@ public class Bank {
 	}
 
 	public static void main(String[] args) {
+		@SuppressWarnings("unused")
 		Bank bank = Bank.getInstance();
 	}
 
