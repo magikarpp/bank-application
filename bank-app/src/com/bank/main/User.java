@@ -1,11 +1,12 @@
 package com.bank.main;
 
-public class User {
+import java.util.ArrayList;
 
+public class User {
 	private String email;
 	private String username;
 	private String pass;
-	private double balance;
+	private ArrayList<Account> accounts = new ArrayList<>();
 	
 	private Handler handler;
 	
@@ -14,39 +15,28 @@ public class User {
 		email = "";
 		username = "";
 		pass = "";
-		balance = 0;
+		accounts.add(new Account("Tester", "Checking", this, handler));
 		this.handler = handler;
 	}
 	
-	public User(String email, String username, String pass, double balance, Handler handler) {
+	public User(String email, String username, String pass, Handler handler) {
 		super();
 		this.email = email;
 		this.username = username;
 		this.pass = pass;
-		this.balance = balance;
+		this.accounts = new ArrayList<>();
 		this.handler = handler;
 	}
 	
-	public User(String email, String username, String pass) {
+	public User(String email, String username, String pass, ArrayList<Account> accounts, Handler handler) {
 		super();
 		this.email = email;
 		this.username = username;
 		this.pass = pass;
-		this.balance = 0;
+		this.accounts = accounts;
+		this.handler = handler;
 	}
 	
-	public double depositBalance(double amount) {
-		balance += amount;
-		handler.updateUser(this);
-		return balance;
-	}
-	
-	public double withdrawBalance(double amount) {
-		balance -= amount;
-		handler.updateUser(this);
-		return balance;
-	}
-
 	public String getUsername() {
 		return username;
 	}
@@ -68,12 +58,25 @@ public class User {
 		this.pass = pass;
 		handler.updateUser(this);
 	}
-	public double getBalance() {
-		return balance;
+	
+	public Account getAccountByName(String name) {
+		Account tempAccount;
+		for(int i = 0; i < accounts.size(); i++) {
+			tempAccount = accounts.get(i);
+			if(tempAccount.getName().equals(name)) return tempAccount;
+		}
+		return null;
 	}
-	public void setBalance(double balance) {
-		this.balance = balance;
-		handler.updateUser(this);
+	
+	public ArrayList<Account> getAccounts() {
+		return accounts;
+	}
+
+	public void addAccount(Account account) {
+		this.accounts.add(account);
+	}
+	public boolean removeAccount(Account account) {
+		return this.accounts.remove(account);
 	}
 
 }

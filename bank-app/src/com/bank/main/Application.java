@@ -11,14 +11,13 @@ public class Application {
 	private User currentUser = null;
 	private boolean isLoggedIn = false;
 	private boolean exit = false;
-	
+
 	public Application(Handler handler) {
 		this.handler = handler;
 		
 	}
 	
 	public void start() {
-		
 		while(!exit) {
 			
 			notLoggedIn();
@@ -30,13 +29,15 @@ public class Application {
 		
 	}
 	
+	// I know, I should have used switch statements... don't kink shame me
 	private void notLoggedIn() {
 		while(!isLoggedIn) {
 			System.out.println("##### Bank of Jaemin Shim #####");
 			System.out.println("Please enter 'login', 'signup', or '!exit'");
 			
-			String riddle = scan.nextLine().toLowerCase().replaceAll("\\s+","");;
+			String riddle = scan.nextLine().toLowerCase().replaceAll("\\s+","");
 			
+			// Action: Login
 			if(riddle.equals("login")) {
 				System.out.println();
 				System.out.println("Please enter email (or !exit):");
@@ -70,7 +71,8 @@ public class Application {
 						System.out.println("User Successfully Logged In.\n");
 					}
 				}
-				
+			
+			// Action: Signup
 			} else if(riddle.equals("signup")) {
 				System.out.println("Please enter new email (or !exit):");
 				String email = scan.nextLine();
@@ -108,18 +110,51 @@ public class Application {
 							isLoggedIn = false;
 							System.out.println("Successfully exited.\n");
 						} else {
-							handler.addUser(email, username, pass);
-							System.out.println("User Successfully Created!\n");
+							System.out.println("Please enter new type for new account (or !exit):");
+							System.out.println("Checking or Savings?");
+							String type = scan.nextLine().toLowerCase();
+							
+							while((!type.equals("checking") && !type.equals("savings")) && !type.equals("!exit")) {
+								System.out.println("\nType not valid.");
+								System.out.println("Please enter new type for new account (or !exit):");
+								System.out.println("Checking or Savings?");
+								type = scan.nextLine().toLowerCase();
+							}
+							if(pass.equals("!exit")) {
+								isLoggedIn = false;
+								System.out.println("Successfully exited.\n");
+							} else {
+								System.out.println("Please enter name for new account (or !exit):");
+								String accountName = scan.nextLine();
+								
+								while(accountName.length() > 25 && !accountName.equals("!exit")) {
+									System.out.println("\nAccount name format not valid.");
+									System.out.println("Please enter name for new account (or !exit):");
+									accountName = scan.nextLine();
+								}
+								if(pass.equals("!exit")) {
+									isLoggedIn = false;
+									System.out.println("Successfully exited.\n");
+								} else {
+									User newUser = new User(email, username, pass, handler);
+									Account newAccount = new Account(accountName, type, newUser, handler);
+									newUser.addAccount(newAccount);
+									handler.addUser(newUser);
+									System.out.println("User Successfully Created!\n");
+								}
+							}
+							
 						}
 					}
 				}
 				
-				
+			// Action: Exit
 			} else if(riddle.equals("!exit")) {
 				System.out.println("See ya later Alligator!");
 				exit = true;
 				break;
-				
+			
+			// Action: Invalid
 			} else {
 				System.out.println("Invalid Action\n");
 			}
@@ -129,37 +164,110 @@ public class Application {
 	
 	private void currentlyLoggedIn() {
 		String message = "";
+		boolean confirmed = false;
+
 		while(isLoggedIn) {
 			clearScreen();
 			
 			System.out.println("Username:   " + currentUser.getUsername());
 			System.out.println("Email:      " + currentUser.getEmail());
-			System.out.println("Balance:    " + currentUser.getBalance());
+			for(int i = 0; i < currentUser.getAccounts().size(); i++) {
+				System.out.println("Account:    [" + currentUser.getAccounts().get(i).getType() + "] " + currentUser.getAccounts().get(i).getName() + " $" + currentUser.getAccounts().get(i).getBalance());
+			}
 			
 			System.out.println();
-			System.out.println("Actions: 'deposit', 'withdraw', or 'logout'");
+			System.out.println("Actions: 'deposit', 'withdraw', 'transfer', or 'logout'");
 			System.out.println(message);
 			
-			String action = scan.nextLine().toLowerCase();
+			String action = scan.nextLine().toLowerCase().replaceAll("\\s+","");
 			
+			// Action: Logout
 			if(action.equals("logout")) {
 				isLoggedIn = false;
 				System.out.println("User Logged Out Successfully.\n");
-				
+			
+			// Action: Deposit
 			} else if(action.equals("deposit")) {
-				System.out.println("How much to deposit?");
-				double amount = scan.nextDouble();
-				currentUser.depositBalance(amount);
-				message = "$" + amount + " has been deposited to balance.";
+				System.out.println("\nChoose One (!exit):");
+				for(int i = 0; i < currentUser.getAccounts().size(); i++) {
+					System.out.println("[" + currentUser.getAccounts().get(i).getType() + "] " + currentUser.getAccounts().get(i).getName() + " $" + currentUser.getAccounts().get(i).getBalance());
+				}
+				String accountName = scan.nextLine();
 				
+				while(currentUser.getAccountByName(accountName) == null && !accountName.equals("!exit")) {
+					System.out.println("\nAccount does not exist.");
+					System.out.println("\nChoose One (!exit):");
+					for(int i = 0; i < currentUser.getAccounts().size(); i++) {
+						System.out.println("[" + currentUser.getAccounts().get(i).getType() + "] " + currentUser.getAccounts().get(i).getName() + " $" + currentUser.getAccounts().get(i).getBalance());
+					}
+					accountName = scan.nextLine();
+				}
+				if(accountName.equals("!exit")) {
+					message = "Transaction Successfully Cancelled.";
+				} else {
+					System.out.println("How much to deposit? (!exit)");
+					String stramount = scan.nextLine().toLowerCase().replaceAll("\\s+","");
+					
+					if(stramount.equals("!exit")) {
+						message = "Transaction Successfully Cancelled.";
+					} else {
+						try {
+							double amount = Double.valueOf(stramount);
+							confirmed = currentUser.getAccountByName(accountName).depositBalance(amount);
+							if(confirmed) message = "$" + amount + " has been deposited to " + currentUser.getAccountByName(accountName).getName();
+							else message = "Insufficient Funds. Please try again.";
+							
+						} catch(Exception e) {
+							message = "Transaction Failed: Invalid Numeric Input.";
+						}
+					}
+				}
+				
+			// Action: Withdraw
 			} else if(action.equals("withdraw")) {
-				System.out.println("How much to withdraw?");
-				double amount = scan.nextDouble();
-				currentUser.withdrawBalance(amount);
-				message = "$" + amount + " has been withdrawn from balance.";
+				System.out.println("\nChoose One (!exit):");
+				for(int i = 0; i < currentUser.getAccounts().size(); i++) {
+					System.out.println("[" + currentUser.getAccounts().get(i).getType() + "] " + currentUser.getAccounts().get(i).getName() + " $" + currentUser.getAccounts().get(i).getBalance());
+				}
+				String accountName = scan.nextLine();
 				
+				while(currentUser.getAccountByName(accountName) == null && !accountName.equals("!exit")) {
+					System.out.println("\nAccount does not exist.");
+					System.out.println("\nChoose One (!exit):");
+					for(int i = 0; i < currentUser.getAccounts().size(); i++) {
+						System.out.println("[" + currentUser.getAccounts().get(i).getType() + "] " + currentUser.getAccounts().get(i).getName() + " $" + currentUser.getAccounts().get(i).getBalance());
+					}
+					accountName = scan.nextLine();
+				}
+				if(accountName.equals("!exit")) {
+					message = "Transaction Successfully Cancelled.";
+				} else {
+					System.out.println("How much to withdraw? (!exit)");
+					String stramount = scan.nextLine().toLowerCase().replaceAll("\\s+","");
+					
+					if(stramount.equals("!exit")) {
+						message = "Transaction Successfully Cancelled.";
+					} else {
+						try {
+							double amount = Double.valueOf(stramount);
+							confirmed = currentUser.getAccountByName(accountName).withdrawBalance(amount);
+							if(confirmed) message = "$" + amount + " has been withdrawn from " + currentUser.getAccountByName(accountName).getName();
+							else message = "Insufficient Funds. Please try again.";
+							
+						} catch(Exception e) {
+							message = "Transaction Failed: Invalid Numeric Input.";
+						}
+					}
+					
+				}
+			
+			// Action: Transfer
+			} else if(action.equals("transfer")){
+				message = "Transfer not yet implemented";
+			
+			// Action: Invalid
 			} else {
-				// TODO: [BUG] Message always printing out "Invalid Action", no matter what action.
+			
 				message = "Invalid Action";
 			}
 		}
@@ -171,12 +279,12 @@ public class Application {
 		}
 	}
 	
+	// Meticulous email validation from Professor OverFlow
 	private static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 	
 	private static boolean validate(String emailStr) {
 	        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
 	        return matcher.find();
 	}
-	
 	
 }
