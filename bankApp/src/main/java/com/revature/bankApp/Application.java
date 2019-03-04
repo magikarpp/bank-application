@@ -267,14 +267,150 @@ public class Application {
 					
 				}
 			
-			// TODO: Action: Transfer
+			// Action: Transfer
 			} else if(action.equals("transfer")){
 				System.out.println("\nTransfer Between:");
-				System.out.println("'My Accounts' or 'Other Accounts'");
+				System.out.println("'My Accounts', 'Other Accounts', or '!exit'");
 				String option = scan.nextLine().toLowerCase().replaceAll("\\s+","");
 				
 				if(option.equals("myaccounts")) {
+					System.out.println("\nChoose Account To Transfer FROM By Name (!exit):");
+					for(int i = 0; i < currentUser.getAccounts().size(); i++) {
+						System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
+					}
+					String account1Name = scan.nextLine();
 					
+					while(currentUser.getAccountByName(account1Name) == null && !account1Name.equals("!exit")) {
+						System.out.println("\nAccount does not exist.");
+						System.out.println("\nChoose Account To Transfer FROM By Name (!exit):");
+						for(int i = 0; i < currentUser.getAccounts().size(); i++) {
+							System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
+						}
+						account1Name = scan.nextLine();
+					}
+					
+					if(account1Name.equals("!exit")) {
+						message = "Transaction Successfully Cancelled.";
+					} else {
+						System.out.println("\nChoose Account To Transfer TO By Name (!exit):");
+						for(int i = 0; i < currentUser.getAccounts().size(); i++) {
+							System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
+						}
+						String account2Name = scan.nextLine();
+						
+						while(currentUser.getAccountByName(account2Name) == null && !account2Name.equals("!exit")) {
+							System.out.println("\nAccount does not exist.");
+							System.out.println("\nChoose Account To Transfer TO By Name (!exit):");
+							for(int i = 0; i < currentUser.getAccounts().size(); i++) {
+								System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
+							}
+							account2Name = scan.nextLine();
+						}
+						
+						if(account2Name.equals("!exit")) {
+							message = "Transaction Successfully Cancelled.";
+						} else {
+							System.out.println("How much to transfer? (!exit)");
+							String stramount = scan.nextLine().toLowerCase().replaceAll("\\s+","");
+							
+							if(stramount.equals("!exit")) {
+								message = "Transaction Successfully Cancelled.";
+							} else {
+								try {
+									double amount = Double.valueOf(stramount);
+									if(amount < 0) {
+										throw new Exception();
+									}
+									
+									confirmed = handler.transferFunds(currentUser.getAccountByName(account1Name), currentUser.getAccountByName(account2Name), amount);
+									if(confirmed) message = "$" + amount + " has been transferred from " + currentUser.getAccountByName(account1Name).getName() + " to account " + currentUser.getAccountByName(account2Name).getName();
+									else message = "Insufficient Funds. Please try again";
+									
+								} catch(Exception e) {
+									message = "Transaction Failed: Invalid Numeric Input";
+								}
+								
+							}
+						}
+					}
+				
+				// Other Accounts
+				} else if(option.equals("otheraccounts")){
+					System.out.println("\nChoose Account To Transfer FROM By Name (!exit):");
+					for(int i = 0; i < currentUser.getAccounts().size(); i++) {
+						System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
+					}
+					String account1Name = scan.nextLine();
+					
+					while(currentUser.getAccountByName(account1Name) == null && !account1Name.equals("!exit")) {
+						System.out.println("\nAccount does not exist.");
+						System.out.println("\nChoose Account To Transfer FROM By Name (!exit):");
+						for(int i = 0; i < currentUser.getAccounts().size(); i++) {
+							System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
+						}
+						account1Name = scan.nextLine();
+					}
+					
+					if(account1Name.equals("!exit")) {
+						message = "Transaction Successfully Cancelled.";
+					} else {
+						System.out.println("\nEnter User by Email to transfer funds to (!exit):");
+						String sendUser = scan.nextLine();
+						
+						while((!validate(sendUser) || !handler.userExists(sendUser)) && !sendUser.equals("!exit")) {
+							System.out.println("\nUser does not exist.");
+							System.out.println("\nEnter User by Email to transfer funds to (!exit):");
+							sendUser = scan.nextLine();
+						}
+						
+						if(sendUser.equals("!exit")) {
+							message = "Transaction Successfully Cancelled.";
+						} else {
+							User tempUser = handler.grabUserByEmail(sendUser);
+							System.out.println("\nChoose Account To Transfer To By Name (!exit):");
+							for(int i = 0; i < tempUser.getAccounts().size(); i++) {
+								System.out.println("[" + tempUser.getAccounts().get(i).getType() + "]\t" + tempUser.getAccounts().get(i).getName());
+							}
+							String account2Name = scan.nextLine();
+							
+							while(tempUser.getAccountByName(account2Name) == null && !account2Name.equals("!exit")) {
+								System.out.println("\nAccount does not exist.");
+								System.out.println("\nChoose Account To Transfer To By Name (!exit):");
+								for(int i = 0; i < tempUser.getAccounts().size(); i++) {
+									System.out.println("[" + tempUser.getAccounts().get(i).getType() + "]\t" + tempUser.getAccounts().get(i).getName());
+								}
+								account2Name = scan.nextLine();
+							}
+							
+							if(account2Name.equals("!exit")) {
+								message = "Transaction Successfully Cancelled.";
+							} else {
+								System.out.println("How much to transfer? (!exit)");
+								String stramount = scan.nextLine().toLowerCase().replaceAll("\\s+","");
+								
+								if(stramount.equals("!exit")) {
+									message = "Transaction Successfully Cancelled.";
+								} else {
+									try {
+										double amount = Double.valueOf(stramount);
+										if(amount < 0) {
+											throw new Exception();
+										}
+										
+										confirmed = handler.transferFunds(currentUser.getAccountByName(account1Name), tempUser.getAccountByName(account2Name), amount);
+										if(confirmed) message = "$" + amount + " has been transferred from " + currentUser.getAccountByName(account1Name).getName() + " to account " + tempUser.getAccountByName(account2Name).getName();
+										else message = "Insufficient Funds. Please try again";
+										
+									} catch(Exception e) {
+										message = "Transaction Failed: Invalid Numeric Input";
+									}	
+								}
+							}
+						}
+					}					
+					
+				} else {
+					message = "Invalid Action";
 				}
 			
 			// TODO: Action: Accounts

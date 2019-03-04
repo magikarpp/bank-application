@@ -308,17 +308,42 @@ public class Handler {
 	}
 	
 	public boolean transferFunds(Account account1, Account account2, double amount) {
-		boolean success;
+		boolean success = false;
 		
-		if(!account1.withdrawBalance(amount) || !account2.depositBalance(amount)) {
-			success = false;
-		} else {
-			account1.withdrawBalance(amount);
+		success = account1.withdrawBalance(amount);
+		if(success) {
 			account2.depositBalance(amount);
-			success = true;
 		}
 		
 		return success;
+	}
+	
+	public Account grabAccountByName(String name) {
+		Account tempAccount = null;
+		
+		String sql = "SELECT * FROM BankAccount WHERE AccountName = ?";	
+		
+		try(Connection con = ConnectionUtil.getConnectionFromFile();
+			PreparedStatement ps = con.prepareStatement(sql);){
+			
+			ps.setString(1, name);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				String accName = rs.getString("AccountName");
+				String accType = rs.getString("AccountType");
+				Double accBalance = rs.getDouble("AccountBalance");
+				tempAccount = new Account(accName, accType, accBalance, this);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		return tempAccount;
 	}
 
 }
