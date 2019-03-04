@@ -1,7 +1,5 @@
 package com.revature.bankApp;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,10 +14,10 @@ public class Application {
 
 	public Application(Handler handler) {
 		this.handler = handler;
-		
 	}
 	
 	public void start() {
+		
 		while(!exit) {
 			
 			notLoggedIn();
@@ -30,8 +28,7 @@ public class Application {
 		
 		
 	}
-	
-	// I know, I should have used switch statements... don't kink shame me
+
 	private void notLoggedIn() {
 		while(!isLoggedIn) {
 			System.out.println("##### Bank of Jaemin Shim #####");
@@ -58,7 +55,7 @@ public class Application {
 					System.out.println("Please enter password (or !exit):");
 					String pass = scan.nextLine();
 					
-					while(!handler.userExists(email, pass) && !pass.equals("!exit")) {
+					while(!handler.passwordValidation(email, pass) && !pass.equals("!exit")) {
 						System.out.println("\nPassword does not match.");
 						System.out.println("Please enter password (or !exit):");
 						pass = scan.nextLine();
@@ -139,10 +136,9 @@ public class Application {
 									System.out.println("Successfully exited.\n");
 								} else {
 									User newUser = new User(email, username, pass, handler);
-									Account newAccount = new Account(accountName, type, newUser, handler);
-									newUser.addAccount(newAccount);
-									handler.updateUser(newUser);
-									System.out.println("User " + newUser.getUsername() + " Successfully Created!\n");
+									Account newAccount = new Account(accountName, type, handler);
+									handler.createNewUser(newUser, newAccount);
+									System.out.println("User Successfully Created!\n");
 								}
 							}
 							
@@ -169,21 +165,16 @@ public class Application {
 		boolean confirmed = false;
 
 		while(isLoggedIn) {
-			
-			// TODO: Uncomment below once handler.updateuser and handler.getUser is implemented
-			// handler.updateUser(currentUser);
-			// currentUser = handler.getUser(currentUser.getEmail());
-			
 			clearScreen();
 			
-			System.out.println("Username:   " + currentUser.getUsername());
-			System.out.println("Email:      " + currentUser.getEmail());
+			System.out.println("Username:\t" + currentUser.getUsername());
+			System.out.println("Email:\t\t" + currentUser.getEmail());
 			for(int i = 0; i < currentUser.getAccounts().size(); i++) {
-				System.out.println("Account:    [" + currentUser.getAccounts().get(i).getType() + "] " + currentUser.getAccounts().get(i).getName() + " $" + currentUser.getAccounts().get(i).getBalance());
+				System.out.println("Account:\t[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
 			}
 			
 			System.out.println();
-			System.out.println("Actions: 'deposit', 'withdraw', 'transfer', 'accounts', 'history', or 'logout'");
+			System.out.println("Actions: 'deposit', 'withdraw', 'transfer', 'accounts', or 'logout'");
 			System.out.println(message);
 			
 			String action = scan.nextLine().toLowerCase().replaceAll("\\s+","");
@@ -197,7 +188,7 @@ public class Application {
 			} else if(action.equals("deposit")) {
 				System.out.println("\nChoose Account By Name (!exit):");
 				for(int i = 0; i < currentUser.getAccounts().size(); i++) {
-					System.out.println("[" + currentUser.getAccounts().get(i).getType() + "] " + currentUser.getAccounts().get(i).getName() + " $" + currentUser.getAccounts().get(i).getBalance());
+					System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
 				}
 				String accountName = scan.nextLine();
 				
@@ -205,7 +196,7 @@ public class Application {
 					System.out.println("\nAccount does not exist.");
 					System.out.println("\nChoose Account By Name (!exit):");
 					for(int i = 0; i < currentUser.getAccounts().size(); i++) {
-						System.out.println("[" + currentUser.getAccounts().get(i).getType() + "] " + currentUser.getAccounts().get(i).getName() + " $" + currentUser.getAccounts().get(i).getBalance());
+						System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
 					}
 					accountName = scan.nextLine();
 				}
@@ -231,7 +222,6 @@ public class Application {
 							message = "Transaction Failed: Invalid Numeric Input";
 						}
 						
-						currentUser.getAccountByName(accountName).addHistory("[" + (new SimpleDateFormat("dd-MM-yyyy").format(new Date())) + "] Balance: " + currentUser.getAccountByName(accountName).getBalance() + " [" + message + "] By [" + currentUser.getUsername() + "] \n");
 					}
 				}
 				
@@ -239,7 +229,7 @@ public class Application {
 			} else if(action.equals("withdraw")) {
 				System.out.println("\nChoose Account By Name (!exit):");
 				for(int i = 0; i < currentUser.getAccounts().size(); i++) {
-					System.out.println("[" + currentUser.getAccounts().get(i).getType() + "] " + currentUser.getAccounts().get(i).getName() + " $" + currentUser.getAccounts().get(i).getBalance());
+					System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
 				}
 				String accountName = scan.nextLine();
 				
@@ -247,7 +237,7 @@ public class Application {
 					System.out.println("\nAccount does not exist.");
 					System.out.println("\nChoose Account By Name (!exit):");
 					for(int i = 0; i < currentUser.getAccounts().size(); i++) {
-						System.out.println("[" + currentUser.getAccounts().get(i).getType() + "] " + currentUser.getAccounts().get(i).getName() + " $" + currentUser.getAccounts().get(i).getBalance());
+						System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
 					}
 					accountName = scan.nextLine();
 				}
@@ -273,43 +263,18 @@ public class Application {
 							message = "Transaction Failed: Invalid Numeric Input";
 						}
 						
-						currentUser.getAccountByName(accountName).addHistory("[" + (new SimpleDateFormat("dd-MM-yyyy").format(new Date())) + "] Balance: " + currentUser.getAccountByName(accountName).getBalance() + " [" + message + "] By [" + currentUser.getUsername() + "]\n");
 					}
 					
 				}
 			
 			// TODO: Action: Transfer
 			} else if(action.equals("transfer")){
-				message = "Transfer not yet implemented";
-			
-			// Action: History
-			} else if(action.equals("history")) {
-				System.out.println("\nWhich Account History would you like to view? (!exit)");
-				for(int i = 0; i < currentUser.getAccounts().size(); i++) {
-					System.out.println("[" + currentUser.getAccounts().get(i).getType() + "] " + currentUser.getAccounts().get(i).getName());
-				}
+				System.out.println("\nTransfer Between:");
+				System.out.println("'My Accounts' or 'Other Accounts'");
+				String option = scan.nextLine().toLowerCase().replaceAll("\\s+","");
 				
-				String accountName = scan.nextLine();
-				
-				while(currentUser.getAccountByName(accountName) == null && !accountName.equals("!exit")) {
-					System.out.println("\nAccount does not exist.");
-					System.out.println("Which Account History would you like to view? (!exit)");
-					for(int i = 0; i < currentUser.getAccounts().size(); i++) {
-						System.out.println("[" + currentUser.getAccounts().get(i).getType() + "] " + currentUser.getAccounts().get(i).getName());
-					}
-					accountName = scan.nextLine();
-				}
-				
-				if(accountName.equals("!exit")) {
-					message = "";
-				} else {
-					clearScreen();
-					System.out.println("Transaction History of " + currentUser.getAccountByName(accountName).getName() + ":\n");
-					System.out.println(currentUser.getAccountByName(accountName).getHistory());
-					System.out.println("\nPress ENTER to continue...");
-					@SuppressWarnings("unused")
-					String con = scan.nextLine();
-					message = "";
+				if(option.equals("myaccounts")) {
+					
 				}
 			
 			// TODO: Action: Accounts

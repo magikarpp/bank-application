@@ -1,14 +1,16 @@
 package com.revature.bankApp;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Account {
+public class Account implements Serializable {
 
+	private static final long serialVersionUID = -6505460802093854096L;
+	
 	private String name;
 	private String type;
 	private double balance;
 	private ArrayList<User> owners = new ArrayList<User>();
-	private String history;
 
 	private Handler handler;
 	
@@ -17,27 +19,24 @@ public class Account {
 		type = "checking";
 		balance = 0;
 		owners = new ArrayList<User>();
-		history = "";
 		this.handler = handler;
 	}
 	
-	Account(String name, String type, User user, Handler handler) {
+	Account(String name, String type, Handler handler) {
 		super();
 		this.name = name;
 		this.type = type;
 		balance = 0;
-		this.owners.add(user);
-		this.history = "";
+		this.owners = new ArrayList<User>();
 		this.handler = handler;
 	}
 
-	public Account(String name, String type, double balance, ArrayList<User> owners, String history, Handler handler) {
+	public Account(String name, String type, double balance, Handler handler) {
 		super();
 		this.name = name;
 		this.type = type;
 		this.balance = balance;
-		this.owners = owners;
-		this.history = history;
+		this.owners = new ArrayList<User>();
 		this.handler = handler;
 	}
 	
@@ -84,26 +83,19 @@ public class Account {
 
 	public void addOwner(User user) {
 		this.owners.add(user);
-		handler.updateAccount(this);
 	}
 	
 	public boolean removeOwner(User user) {
-		handler.updateAccount(this);
 		return this.owners.remove(user);
 	}
 
-	public String getHistory() {
-		return history;
-	}
-
-	public void addHistory(String history) {
-		this.history += history;
-		handler.updateAccount(this);
-	}
-	
-	public void deleteHistory() {
-		history = "";
-		handler.updateAccount(this);
+	@Override
+	public String toString() {
+		String strOwners = "";
+		for(int i = 0; i < owners.size(); i++) {
+			strOwners += "(" + owners.get(i).getEmail() + ")";
+		}
+		return "Account [name=" + name + ", type=" + type + ", balance=" + balance + ", owners=" + strOwners + "]";
 	}
 
 }

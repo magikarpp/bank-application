@@ -1,8 +1,12 @@
 package com.revature.bankApp;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class User {
+public class User implements Serializable {
+	
+	private static final long serialVersionUID = -3811351239130265652L;
+	
 	private String email;
 	private String username;
 	private String pass;
@@ -15,7 +19,7 @@ public class User {
 		email = "";
 		username = "";
 		pass = "";
-		accounts.add(new Account(handler));
+		accounts = new ArrayList<Account>();
 		this.handler = handler;
 	}
 	
@@ -73,12 +77,16 @@ public class User {
 	}
 
 	public void addAccount(Account account) {
-		handler.updateAccount(account);
 		this.accounts.add(account);
 	}
 	public boolean removeAccount(Account account) {
-		handler.updateAccount(account);
 		return this.accounts.remove(account);
+	}
+
+	@Override
+	public String toString() {
+		return "User [email=" + email + ", username=" + username + ", pass=" + pass + ", accounts=" + accounts.toString()
+				+  "]";
 	}
 
 }

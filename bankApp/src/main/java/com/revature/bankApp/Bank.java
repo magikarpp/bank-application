@@ -7,12 +7,13 @@ public class Bank {
 	private Handler handler;
 	private Application app;
 	
+	
 	private Bank() {
-		
+			
 		handler = new Handler();
 		app = new Application(handler);
 		
-		app.start();
+		app.start();	
 	}
 	
 	private static Bank getInstance() {
