@@ -2,18 +2,16 @@
 --DROP TABLE BankAccount;
 
 DELETE
-FROM BankUser;
-
-DELETE
-FROM BankAccount;
-
-DELETE
 FROM UserAccount;
 
 DELETE
 FROM AccountTransaction;
 
-commit;
+DELETE
+FROM BankUser;
+
+DELETE
+FROM BankAccount;
 
 CREATE TABLE BankUser (
     UserEmail VARCHAR2(50) NOT NULL,
@@ -40,8 +38,6 @@ CREATE TABLE AccountTransaction (
     AccountName VARCHAR2(50) NOT NULL,
     CONSTRAINT PK_MessageDate PRIMARY KEY (Message, DateStamp, AccountName)
 );
-
-drop table accounttransaction;
 
 ALTER TABLE AccountTransaction ADD CONSTRAINT FK_ATAccount
     FOREIGN KEY (AccountName) REFERENCES BankAccount (AccountName);

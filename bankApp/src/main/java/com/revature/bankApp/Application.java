@@ -424,7 +424,7 @@ public class Application {
 									
 									Timestamp stamp = new Timestamp(System.currentTimeMillis());
 									Transaction trans = new Transaction(stamp + " User [" + currentUser.getUsername()  + "]: Balance [" + currentUser.getAccountByName(account1Name).getBalance() + "]: " + message, stamp, account1Name);
-									Transaction trans2 = new Transaction(stamp + " User [" + currentUser.getUsername()  + "]: Balance [" + currentUser.getAccountByName(account2Name).getBalance() + "]: " + message, stamp, account2Name);
+									Transaction trans2 = new Transaction(stamp + " User [" + currentUser.getUsername()  + "]: Balance [" + handler.grabAccountByName(account2Name).getBalance() + "]: " + message, stamp, account2Name);
 									handler.updateTransaction(trans);
 									handler.updateTransaction(trans2);
 								}
