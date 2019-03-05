@@ -225,7 +225,7 @@ public class Application {
 						}
 						
 						Timestamp stamp = new Timestamp(System.currentTimeMillis());
-						Transaction trans = new Transaction(stamp + " User [" + currentUser.getUsername()  + "]: " + message, stamp, accountName);
+						Transaction trans = new Transaction(stamp + " User [" + currentUser.getUsername()  + "]: Balance Total [" + currentUser.getAccountByName(accountName).getBalance() + "]: " + message, stamp, accountName);
 						handler.updateTransaction(trans);
 						
 					}
@@ -271,7 +271,7 @@ public class Application {
 						}
 						
 						Timestamp stamp = new Timestamp(System.currentTimeMillis());
-						Transaction trans = new Transaction(stamp + " User [" + currentUser.getUsername()  + "]: " + message, stamp, accountName);
+						Transaction trans = new Transaction(stamp + " User [" + currentUser.getUsername()  + "]: Balance Total [" + currentUser.getAccountByName(accountName).getBalance() + "]: " + message, stamp, accountName);
 						handler.updateTransaction(trans);
 						
 					}
@@ -342,8 +342,11 @@ public class Application {
 								}
 								
 								Timestamp stamp = new Timestamp(System.currentTimeMillis());
-								Transaction trans = new Transaction(stamp + " User [" + currentUser.getUsername()  + "]: " + message, stamp, account1Name);
+								Transaction trans = new Transaction(stamp + " User [" + currentUser.getUsername()  + "]: Balance Total [" + currentUser.getAccountByName(account1Name).getBalance() + "]: " + message, stamp, account1Name);
+								Transaction trans2 = new Transaction(stamp + " User [" + currentUser.getUsername()  + "]: Balance Total [" + currentUser.getAccountByName(account2Name).getBalance() + "]: " + message, stamp, account2Name);
 								handler.updateTransaction(trans);
+								handler.updateTransaction(trans2);
+								
 							}
 						}
 					}
@@ -420,8 +423,10 @@ public class Application {
 									}	
 									
 									Timestamp stamp = new Timestamp(System.currentTimeMillis());
-									Transaction trans = new Transaction(stamp + " User [" + currentUser.getUsername()  + "]: " + message, stamp, account1Name);
+									Transaction trans = new Transaction(stamp + " User [" + currentUser.getUsername()  + "]: Balance Total [" + currentUser.getAccountByName(account1Name).getBalance() + "]: " + message, stamp, account1Name);
+									Transaction trans2 = new Transaction(stamp + " User [" + currentUser.getUsername()  + "]: Balance Total [" + currentUser.getAccountByName(account2Name).getBalance() + "]: " + message, stamp, account2Name);
 									handler.updateTransaction(trans);
+									handler.updateTransaction(trans2);
 								}
 							}
 						}

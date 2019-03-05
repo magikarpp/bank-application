@@ -38,7 +38,7 @@ CREATE TABLE AccountTransaction (
     Message VARCHAR2(255),
     DateStamp TIMESTAMP,
     AccountName VARCHAR2(50) NOT NULL,
-    CONSTRAINT PK_MessageDate PRIMARY KEY (Message, DateStamp)
+    CONSTRAINT PK_MessageDate PRIMARY KEY (Message, DateStamp, AccountName)
 );
 
 drop table accounttransaction;
