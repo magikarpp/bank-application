@@ -171,11 +171,10 @@ public class Handler {
 			userAccountUpdated = ps.executeUpdate();
 				
 		} catch (SQLException e) {
-			e.printStackTrace();
+			
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		
 		
 		return userAccountUpdated;
 		
@@ -285,7 +284,7 @@ public class Handler {
 	public boolean accountExists(String accountName) {
 		boolean exists = false;
 		
-		String sql = "SELECT * FROM BankAccount WHERE AccountName = ?";	
+		String sql = "SELECT * FROM BankAccount WHERE AccountName = ?";
 		
 		try(Connection con = ConnectionUtil.getConnectionFromFile();
 			PreparedStatement ps = con.prepareStatement(sql);){
@@ -344,6 +343,51 @@ public class Handler {
 		}
 		
 		return tempAccount;
+	}
+	
+	public String getTransactionHistory(Account account) {
+		String history = "";
+		
+		String sql = "SELECT message FROM AccountTransaction WHERE AccountName = ? ORDER BY datestamp ASC";
+		
+		try(Connection con = ConnectionUtil.getConnectionFromFile();
+			PreparedStatement ps = con.prepareStatement(sql);){
+			
+			ps.setString(1, account.getName());
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				history += rs.getString("message") + "\n";
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		return history;
+	}
+	
+	public int updateTransaction(Transaction trans) {
+		int transactionsUpdated = 0;
+		String add = ", timestamp '" + String.valueOf(trans.getDate()) + "', '" + trans.getAccountName() + "')";
+		String sql = "INSERT INTO AccountTransaction VALUES (?" + add;
+		
+		try(Connection con = ConnectionUtil.getConnectionFromFile();
+			PreparedStatement ps = con.prepareStatement(sql);){
+			
+			ps.setString(1, trans.getMessage());
+			transactionsUpdated = ps.executeUpdate();
+				
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		return transactionsUpdated;
 	}
 
 }
