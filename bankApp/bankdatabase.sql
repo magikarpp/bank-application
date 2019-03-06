@@ -13,6 +13,8 @@ FROM BankUser;
 DELETE
 FROM BankAccount;
 
+commit;
+
 CREATE TABLE BankUser (
     UserEmail VARCHAR2(50) NOT NULL,
     UserName VARCHAR2(25) NOT NULL,

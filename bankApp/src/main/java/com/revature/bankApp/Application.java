@@ -220,7 +220,7 @@ public class Application {
 							}
 							confirmed = currentUser.getAccountByName(accountName).depositBalance(amount);
 							if(confirmed) message = "$" + amount + " has been deposited to " + currentUser.getAccountByName(accountName).getName();
-							else message = "Insufficient Funds. Please try again";
+							else message = "Friend, our bank is too poor for that amount...";
 							
 						} catch(Exception e) {
 							message = "Transaction Failed: Invalid Numeric Input";
@@ -376,7 +376,7 @@ public class Application {
 						log.info("\nEnter User by Email to transfer funds to (!exit):");
 						String sendUser = scan.nextLine();
 						
-						while((!validate(sendUser) || !handler.userExists(sendUser)) && !sendUser.equals("!exit")) {
+						while((!handler.userExists(sendUser) || currentUser.getEmail().equals(sendUser)) && !sendUser.equals("!exit")) {
 							log.info("\nUser does not exist.");
 							log.info("\nEnter User by Email to transfer funds to (!exit):");
 							sendUser = scan.nextLine();
@@ -501,7 +501,7 @@ public class Application {
 						log.info("\nEnter User By Email To Give Access To (!exit):");
 						String sendUser = scan.nextLine();
 						
-						while((!validate(sendUser) || !handler.userExists(sendUser)) && !sendUser.equals("!exit")) {
+						while((!handler.userExists(sendUser) || currentUser.getEmail().equals(sendUser)) && !sendUser.equals("!exit")) {
 							log.info("\nUser does not exist.");
 							log.info("\nEnter User By Email To Give Access To (!exit):");
 							sendUser = scan.nextLine();

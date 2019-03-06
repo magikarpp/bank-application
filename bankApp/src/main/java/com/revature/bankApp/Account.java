@@ -41,6 +41,9 @@ public class Account implements Serializable {
 	}
 	
 	public boolean depositBalance(double amount) {
+		if(balance + amount >= 999999999999.00) {
+			return false;
+		}
 		balance += amount;
 		handler.updateAccount(this);
 		return true;
