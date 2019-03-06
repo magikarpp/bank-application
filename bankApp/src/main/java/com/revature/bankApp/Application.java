@@ -36,113 +36,113 @@ public class Application {
 	private void notLoggedIn() {
 		while(!isLoggedIn) {
 			log.info("##### Bank of Jaemin Shim #####");
-			System.out.println("Please enter 'login', 'signup', or '!exit'");
+			log.info("Please enter 'login', 'signup', or '!exit'");
 			
 			String riddle = scan.nextLine().toLowerCase().replaceAll("\\s+","");
 			
 			// Action: Login
 			if(riddle.equals("login")) {
-				System.out.println();
-				System.out.println("Please enter email (or !exit):");
+				log.info("");
+				log.info("Please enter email (or !exit):");
 				String email = scan.nextLine();
 				
 				while((!validate(email) || !handler.userExists(email)) && !email.equals("!exit")) {
-					System.out.println("\nEmail does not exist or email input not valid.");
-					System.out.println("Please enter email (or !exit):");
+					log.info("\nEmail does not exist or email input not valid.");
+					log.info("Please enter email (or !exit):");
 					email = scan.nextLine();
 				}
 				
 				if(email.equals("!exit")) {
 					isLoggedIn = false;
-					System.out.println("Successfully exited.\n");
+					log.info("Successfully exited.\n");
 				} else {
-					System.out.println("Please enter password (or !exit):");
+					log.info("Please enter password (or !exit):");
 					String pass = scan.nextLine();
 					
 					while(!handler.passwordValidation(email, pass) && !pass.equals("!exit")) {
-						System.out.println("\nPassword does not match.");
-						System.out.println("Please enter password (or !exit):");
+						log.info("\nPassword does not match.");
+						log.info("Please enter password (or !exit):");
 						pass = scan.nextLine();
 					}
 					if(email.equals("!exit")) {
 						isLoggedIn = false;
-						System.out.println("Successfully exited.\n");
+						log.info("Successfully exited.\n");
 					}
 					else{
 						currentUser = handler.grabUserByEmail(email);
 						isLoggedIn = true;
-						System.out.println("User Successfully Logged In.\n");
+						log.info("User Successfully Logged In.\n");
 					}
 				}
 			
 			// Action: Signup
 			} else if(riddle.equals("signup")) {
-				System.out.println("Please enter new email (or !exit):");
+				log.info("Please enter new email (or !exit):");
 				String email = scan.nextLine();
 				
 				while((!validate(email) || handler.userExists(email)) && !email.equals("!exit")) {
-					System.out.println("\nEmail already a user or email format not valid.");
-					System.out.println("Please enter new email (or !exit):");
+					log.info("\nEmail already a user or email format not valid.");
+					log.info("Please enter new email (or !exit):");
 					email = scan.nextLine();
 				}
 				if(email.equals("!exit")) {
 					isLoggedIn = false;
-					System.out.println("Successfully exited.\n");
+					log.info("Successfully exited.\n");
 				} else {
-					System.out.println("Please enter new username (or !exit):");
+					log.info("Please enter new username (or !exit):");
 					String username = scan.nextLine();
 					
 					while(username.length() > 25 && !username.equals("!exit")) {
-						System.out.println("\nUsername too long");
-						System.out.println("Please enter new username (or !exit):");
+						log.info("\nUsername too long");
+						log.info("Please enter new username (or !exit):");
 						username = scan.nextLine();
 					}
 					if(username.equals("!exit")) {
 						isLoggedIn = false;
-						System.out.println("Successfully exited.\n");
+						log.info("Successfully exited.\n");
 					} else {
-						System.out.println("Please enter new password (or !exit):");
+						log.info("Please enter new password (or !exit):");
 						String pass = scan.nextLine();
 						
 						while(pass.length() > 25 && !pass.equals("!exit")) {
-							System.out.println("\nPassword format not valid.");
-							System.out.println("Please enter new password (or !exit):");
+							log.info("\nPassword format not valid.");
+							log.info("Please enter new password (or !exit):");
 							pass = scan.nextLine();
 						}
 						if(pass.equals("!exit")) {
 							isLoggedIn = false;
-							System.out.println("Successfully exited.\n");
+							log.info("Successfully exited.\n");
 						} else {
-							System.out.println("Please enter new type for new account (or !exit):");
-							System.out.println("Checking or Savings?");
+							log.info("Please enter new type for new account (or !exit):");
+							log.info("Checking or Savings?");
 							String type = scan.nextLine().toLowerCase();
 							
 							while((!type.equals("checking") && !type.equals("savings")) && !type.equals("!exit")) {
-								System.out.println("\nType not valid.");
-								System.out.println("Please enter new type for new account (or !exit):");
-								System.out.println("Checking or Savings?");
+								log.info("\nType not valid.");
+								log.info("Please enter new type for new account (or !exit):");
+								log.info("Checking or Savings?");
 								type = scan.nextLine().toLowerCase();
 							}
 							if(type.equals("!exit")) {
 								isLoggedIn = false;
-								System.out.println("Successfully exited.\n");
+								log.info("Successfully exited.\n");
 							} else {
-								System.out.println("Please enter name for new account (or !exit):");
+								log.info("Please enter name for new account (or !exit):");
 								String accountName = scan.nextLine();
 								
 								while((accountName.length() > 25 || handler.accountExists(accountName)) && !accountName.equals("!exit")) {
-									System.out.println("\nAccount already exists or name format not valid.");
-									System.out.println("Please enter name for new account (or !exit):");
+									log.info("\nAccount already exists or name format not valid.");
+									log.info("Please enter name for new account (or !exit):");
 									accountName = scan.nextLine();
 								}
 								if(accountName.equals("!exit")) {
 									isLoggedIn = false;
-									System.out.println("Successfully exited.\n");
+									log.info("Successfully exited.\n");
 								} else {
 									User newUser = new User(email, username, pass, handler);
 									Account newAccount = new Account(accountName, type, handler);
 									handler.createNewUser(newUser, newAccount);
-									System.out.println("User Successfully Created!\n");
+									log.info("User Successfully Created!\n");
 								}
 							}
 							
@@ -152,13 +152,13 @@ public class Application {
 				
 			// Action: Exit
 			} else if(riddle.equals("!exit")) {
-				System.out.println("See ya later Alligator!");
+				log.info("See ya later Alligator!");
 				exit = true;
 				break;
 			
 			// Action: Invalid
 			} else {
-				System.out.println("Invalid Action\n");
+				log.info("Invalid Action\n");
 			}
 			
 		}
@@ -171,43 +171,43 @@ public class Application {
 		while(isLoggedIn) {
 			clearScreen();
 			
-			System.out.println("Username:\t" + currentUser.getUsername());
-			System.out.println("Email:\t\t" + currentUser.getEmail());
+			log.info("Username:\t" + currentUser.getUsername());
+			log.info("Email:\t\t" + currentUser.getEmail());
 			for(int i = 0; i < currentUser.getAccounts().size(); i++) {
-				System.out.println("Account:\t[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
+				log.info("Account:\t[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
 			}
 			
-			System.out.println();
-			System.out.println("Actions: 'deposit', 'withdraw', 'transfer', 'accounts', or 'logout'");
-			System.out.println(message);
+			log.info("");
+			log.info("Actions: 'deposit', 'withdraw', 'transfer', 'accounts', or 'logout'");
+			log.info(message);
 			
 			String action = scan.nextLine().toLowerCase().replaceAll("\\s+","");
 			
 			// Action: Logout
 			if(action.equals("logout")) {
 				isLoggedIn = false;
-				System.out.println("User Logged Out Successfully.\n");
+				log.info("User Logged Out Successfully.\n");
 			
 			// Action: Deposit
 			} else if(action.equals("deposit")) {
-				System.out.println("\nChoose Account By Name (!exit):");
+				log.info("\nChoose Account By Name (!exit):");
 				for(int i = 0; i < currentUser.getAccounts().size(); i++) {
-					System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
+					log.info("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
 				}
 				String accountName = scan.nextLine();
 				
 				while(currentUser.getAccountByName(accountName) == null && !accountName.equals("!exit")) {
-					System.out.println("\nAccount does not exist.");
-					System.out.println("\nChoose Account By Name (!exit):");
+					log.info("\nAccount does not exist.");
+					log.info("\nChoose Account By Name (!exit):");
 					for(int i = 0; i < currentUser.getAccounts().size(); i++) {
-						System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
+						log.info("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
 					}
 					accountName = scan.nextLine();
 				}
 				if(accountName.equals("!exit")) {
 					message = "Transaction Successfully Cancelled.";
 				} else {
-					System.out.println("How much to deposit? (!exit)");
+					log.info("How much to deposit? (!exit)");
 					String stramount = scan.nextLine().toLowerCase().replaceAll("\\s+","");
 					
 					if(stramount.equals("!exit")) {
@@ -236,24 +236,24 @@ public class Application {
 				
 			// Action: Withdraw
 			} else if(action.equals("withdraw")) {
-				System.out.println("\nChoose Account By Name (!exit):");
+				log.info("\nChoose Account By Name (!exit):");
 				for(int i = 0; i < currentUser.getAccounts().size(); i++) {
-					System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
+					log.info("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
 				}
 				String accountName = scan.nextLine();
 				
 				while(currentUser.getAccountByName(accountName) == null && !accountName.equals("!exit")) {
-					System.out.println("\nAccount does not exist.");
-					System.out.println("\nChoose Account By Name (!exit):");
+					log.info("\nAccount does not exist.");
+					log.info("\nChoose Account By Name (!exit):");
 					for(int i = 0; i < currentUser.getAccounts().size(); i++) {
-						System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
+						log.info("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
 					}
 					accountName = scan.nextLine();
 				}
 				if(accountName.equals("!exit")) {
 					message = "Transaction Successfully Cancelled.";
 				} else {
-					System.out.println("How much to withdraw? (!exit)");
+					log.info("How much to withdraw? (!exit)");
 					String stramount = scan.nextLine().toLowerCase().replaceAll("\\s+","");
 					
 					if(stramount.equals("!exit")) {
@@ -282,22 +282,22 @@ public class Application {
 			
 			// Action: Transfer
 			} else if(action.equals("transfer")){
-				System.out.println("\nTransfer Between:");
-				System.out.println("'My Accounts', 'Other Accounts', or '!exit'");
+				log.info("\nTransfer Between:");
+				log.info("'My Accounts', 'Other Accounts', or '!exit'");
 				String option = scan.nextLine().toLowerCase().replaceAll("\\s+","");
 				
 				if(option.equals("myaccounts")) {
-					System.out.println("\nChoose Account To Transfer FROM By Name (!exit):");
+					log.info("\nChoose Account To Transfer FROM By Name (!exit):");
 					for(int i = 0; i < currentUser.getAccounts().size(); i++) {
-						System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
+						log.info("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
 					}
 					String account1Name = scan.nextLine();
 					
 					while(currentUser.getAccountByName(account1Name) == null && !account1Name.equals("!exit")) {
-						System.out.println("\nAccount does not exist.");
-						System.out.println("\nChoose Account To Transfer FROM By Name (!exit):");
+						log.info("\nAccount does not exist.");
+						log.info("\nChoose Account To Transfer FROM By Name (!exit):");
 						for(int i = 0; i < currentUser.getAccounts().size(); i++) {
-							System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
+							log.info("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
 						}
 						account1Name = scan.nextLine();
 					}
@@ -305,17 +305,17 @@ public class Application {
 					if(account1Name.equals("!exit")) {
 						message = "Transaction Successfully Cancelled.";
 					} else {
-						System.out.println("\nChoose Account To Transfer TO By Name (!exit):");
+						log.info("\nChoose Account To Transfer TO By Name (!exit):");
 						for(int i = 0; i < currentUser.getAccounts().size(); i++) {
-							System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
+							log.info("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
 						}
 						String account2Name = scan.nextLine();
 						
 						while(currentUser.getAccountByName(account2Name) == null && !account2Name.equals("!exit")) {
-							System.out.println("\nAccount does not exist.");
-							System.out.println("\nChoose Account To Transfer TO By Name (!exit):");
+							log.info("\nAccount does not exist.");
+							log.info("\nChoose Account To Transfer TO By Name (!exit):");
 							for(int i = 0; i < currentUser.getAccounts().size(); i++) {
-								System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
+								log.info("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
 							}
 							account2Name = scan.nextLine();
 						}
@@ -323,7 +323,7 @@ public class Application {
 						if(account2Name.equals("!exit")) {
 							message = "Transaction Successfully Cancelled.";
 						} else {
-							System.out.println("How much to transfer? (!exit)");
+							log.info("How much to transfer? (!exit)");
 							String stramount = scan.nextLine().toLowerCase().replaceAll("\\s+","");
 							
 							if(stramount.equals("!exit")) {
@@ -355,17 +355,17 @@ public class Application {
 				
 				// Other Accounts
 				} else if(option.equals("otheraccounts")){
-					System.out.println("\nChoose Account To Transfer FROM By Name (!exit):");
+					log.info("\nChoose Account To Transfer FROM By Name (!exit):");
 					for(int i = 0; i < currentUser.getAccounts().size(); i++) {
-						System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
+						log.info("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
 					}
 					String account1Name = scan.nextLine();
 					
 					while(currentUser.getAccountByName(account1Name) == null && !account1Name.equals("!exit")) {
-						System.out.println("\nAccount does not exist.");
-						System.out.println("\nChoose Account To Transfer FROM By Name (!exit):");
+						log.info("\nAccount does not exist.");
+						log.info("\nChoose Account To Transfer FROM By Name (!exit):");
 						for(int i = 0; i < currentUser.getAccounts().size(); i++) {
-							System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
+							log.info("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
 						}
 						account1Name = scan.nextLine();
 					}
@@ -373,12 +373,12 @@ public class Application {
 					if(account1Name.equals("!exit")) {
 						message = "Transaction Successfully Cancelled.";
 					} else {
-						System.out.println("\nEnter User by Email to transfer funds to (!exit):");
+						log.info("\nEnter User by Email to transfer funds to (!exit):");
 						String sendUser = scan.nextLine();
 						
 						while((!validate(sendUser) || !handler.userExists(sendUser)) && !sendUser.equals("!exit")) {
-							System.out.println("\nUser does not exist.");
-							System.out.println("\nEnter User by Email to transfer funds to (!exit):");
+							log.info("\nUser does not exist.");
+							log.info("\nEnter User by Email to transfer funds to (!exit):");
 							sendUser = scan.nextLine();
 						}
 						
@@ -386,17 +386,17 @@ public class Application {
 							message = "Transaction Successfully Cancelled.";
 						} else {
 							User tempUser = handler.grabUserByEmail(sendUser);
-							System.out.println("\nChoose Account To Transfer To By Name (!exit):");
+							log.info("\nChoose Account To Transfer To By Name (!exit):");
 							for(int i = 0; i < tempUser.getAccounts().size(); i++) {
-								System.out.println("[" + tempUser.getAccounts().get(i).getType() + "]\t" + tempUser.getAccounts().get(i).getName());
+								log.info("[" + tempUser.getAccounts().get(i).getType() + "]\t" + tempUser.getAccounts().get(i).getName());
 							}
 							String account2Name = scan.nextLine();
 							
 							while(tempUser.getAccountByName(account2Name) == null && !account2Name.equals("!exit")) {
-								System.out.println("\nAccount does not exist.");
-								System.out.println("\nChoose Account To Transfer To By Name (!exit):");
+								log.info("\nAccount does not exist.");
+								log.info("\nChoose Account To Transfer To By Name (!exit):");
 								for(int i = 0; i < tempUser.getAccounts().size(); i++) {
-									System.out.println("[" + tempUser.getAccounts().get(i).getType() + "]\t" + tempUser.getAccounts().get(i).getName());
+									log.info("[" + tempUser.getAccounts().get(i).getType() + "]\t" + tempUser.getAccounts().get(i).getName());
 								}
 								account2Name = scan.nextLine();
 							}
@@ -404,7 +404,7 @@ public class Application {
 							if(account2Name.equals("!exit")) {
 								message = "Transaction Successfully Cancelled.";
 							} else {
-								System.out.println("How much to transfer? (!exit)");
+								log.info("How much to transfer? (!exit)");
 								String stramount = scan.nextLine().toLowerCase().replaceAll("\\s+","");
 								
 								if(stramount.equals("!exit")) {
@@ -440,30 +440,30 @@ public class Application {
 			
 			// Action: Accounts
 			} else if(action.equals("accounts")) {
-				System.out.println("\nAccounts Actions: 'new', 'permissions', 'history', or '!exit'");
+				log.info("\nAccounts Actions: 'new', 'permissions', 'history', or '!exit'");
 				String options = scan.nextLine().toLowerCase().replaceAll("\\s+","");
 				
 				// Option: new
 				if(options.equals("new")) {
-					System.out.println("\nPlease enter new type for new account (or !exit):");
-					System.out.println("Checking or Savings?");
+					log.info("\nPlease enter new type for new account (or !exit):");
+					log.info("Checking or Savings?");
 					String type = scan.nextLine().toLowerCase();
 					
 					while((!type.equals("checking") && !type.equals("savings")) && !type.equals("!exit")) {
-						System.out.println("\nType not valid.");
-						System.out.println("Please enter new type for new account (or !exit):");
-						System.out.println("Checking or Savings?");
+						log.info("\nType not valid.");
+						log.info("Please enter new type for new account (or !exit):");
+						log.info("Checking or Savings?");
 						type = scan.nextLine().toLowerCase();
 					}
 					if(type.equals("!exit")) {
 						message = "New Account Creation Successfully Cancelled.";
 					} else {
-						System.out.println("Please enter name for new account (or !exit):");
+						log.info("Please enter name for new account (or !exit):");
 						String accountName = scan.nextLine();
 						
 						while((accountName.length() > 25 || handler.accountExists(accountName)) && !accountName.equals("!exit")) {
-							System.out.println("\nAccount already exists or name format not valid.");
-							System.out.println("Please enter name for new account (or !exit):");
+							log.info("\nAccount already exists or name format not valid.");
+							log.info("Please enter name for new account (or !exit):");
 							accountName = scan.nextLine();
 						}
 						if(accountName.equals("!exit")) {
@@ -481,40 +481,40 @@ public class Application {
 					
 				// Option: permissions
 				} else if(options.equals("permissions")) {
-					System.out.println("\nChoose Account By Name To Give Permission (!exit):");
+					log.info("\nChoose Account By Name To Give Permission (!exit):");
 					for(int i = 0; i < currentUser.getAccounts().size(); i++) {
-						System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
+						log.info("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
 					}
 					String accountName = scan.nextLine();
 					
 					while(currentUser.getAccountByName(accountName) == null && !accountName.equals("!exit")) {
-						System.out.println("\nAccount does not exist.");
-						System.out.println("\nChoose Account By Name To Give Permission (!exit):");
+						log.info("\nAccount does not exist.");
+						log.info("\nChoose Account By Name To Give Permission (!exit):");
 						for(int i = 0; i < currentUser.getAccounts().size(); i++) {
-							System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
+							log.info("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
 						}
 						accountName = scan.nextLine();
 					}
 					if(accountName.equals("!exit")) {
 						message = "Transaction Successfully Cancelled.";
 					} else {
-						System.out.println("\nEnter User By Email To Give Access To (!exit):");
+						log.info("\nEnter User By Email To Give Access To (!exit):");
 						String sendUser = scan.nextLine();
 						
 						while((!validate(sendUser) || !handler.userExists(sendUser)) && !sendUser.equals("!exit")) {
-							System.out.println("\nUser does not exist.");
-							System.out.println("\nEnter User By Email To Give Access To (!exit):");
+							log.info("\nUser does not exist.");
+							log.info("\nEnter User By Email To Give Access To (!exit):");
 							sendUser = scan.nextLine();
 						}
 						
 						if(sendUser.equals("!exit")) {
 							message = "Transaction Successfully Cancelled.";
 						} else {
-							System.out.println("\nYo you mega sure about this? Yes or No? (!exit):");
+							log.info("\nYo you mega sure about this? Yes or No? (!exit):");
 							String confirm = scan.nextLine().toLowerCase().replaceAll("\\s+","");
 							
 							while(!confirm.equals("yes") && !confirm.equals("y") && !confirm.equals("!exit")) {
-								System.out.println("\nYo you mega sure about this? Yes or No? (!exit):");
+								log.info("\nYo you mega sure about this? Yes or No? (!exit):");
 								confirm = scan.nextLine().toLowerCase().replaceAll("\\s+","");
 							}
 							
@@ -535,17 +535,17 @@ public class Application {
 				
 				// Option: history	
 				} else if(options.equals("history")) {
-					System.out.println("\nChoose Account To View History (!exit):");
+					log.info("\nChoose Account To View History (!exit):");
 					for(int i = 0; i < currentUser.getAccounts().size(); i++) {
-						System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
+						log.info("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
 					}
 					String accountName = scan.nextLine();
 					
 					while(currentUser.getAccountByName(accountName) == null && !accountName.equals("!exit")) {
-						System.out.println("\nAccount does not exist.");
-						System.out.println("\nChoose Account To View History (!exit):");
+						log.info("\nAccount does not exist.");
+						log.info("\nChoose Account To View History (!exit):");
 						for(int i = 0; i < currentUser.getAccounts().size(); i++) {
-							System.out.println("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
+							log.info("[" + currentUser.getAccounts().get(i).getType() + "]\t" + currentUser.getAccounts().get(i).getName() + "\t$" + currentUser.getAccounts().get(i).getBalance());
 						}
 						accountName = scan.nextLine();
 					}
@@ -553,10 +553,10 @@ public class Application {
 						message = "Transaction Successfully Cancelled.";
 					} else {
 						clearScreen();
-						System.out.println("Account History Of: " + accountName + "\n");
+						log.info("Account History Of: " + accountName + "\n");
 						String history = handler.getTransactionHistory(handler.grabAccountByName(accountName));
-						System.out.println(history);
-						System.out.println("\nPress ENTER to continue...");
+						log.info(history);
+						log.info("\nPress ENTER to continue...");
 						@SuppressWarnings("unused")
 						String dummy = scan.nextLine();
 					}
@@ -580,7 +580,7 @@ public class Application {
 	
 	private void clearScreen() {
 		for(int i = 0; i<75; i++) {
-			System.out.println();
+			log.info("");
 		}
 	}
 	
