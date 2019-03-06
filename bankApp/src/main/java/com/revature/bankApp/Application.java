@@ -5,8 +5,11 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+
 public class Application {
 	
+	private static Logger log = Logger.getRootLogger();
 	private Handler handler;
 	private static Scanner scan = new Scanner(System.in);
 	private User currentUser = null;
@@ -18,7 +21,6 @@ public class Application {
 	}
 	
 	public void start() {
-		System.out.println(String.valueOf(new Timestamp(System.currentTimeMillis())));
 		
 		while(!exit) {
 			
@@ -33,7 +35,7 @@ public class Application {
 
 	private void notLoggedIn() {
 		while(!isLoggedIn) {
-			System.out.println("##### Bank of Jaemin Shim #####");
+			log.info("##### Bank of Jaemin Shim #####");
 			System.out.println("Please enter 'login', 'signup', or '!exit'");
 			
 			String riddle = scan.nextLine().toLowerCase().replaceAll("\\s+","");
